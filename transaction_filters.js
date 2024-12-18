@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Hide transactions from Quickbook by Keywords
+// @name         Hide transactions from Quickbook
 // @namespace    http://tampermonkey.net/
-// @version      2024-09-10
-// @description  Customisable hiding transactions from the "for review" section of QuickBooks. Perfect for businesses handled by multiple accountants, with different people dealing with different kinds of transactions
-// @author       Hugo Yu
+// @version      2024-12-18
+// @description  Great for businesses who have multiple accountants working on different kinds of transactions
+// @author       You
 // @match        https://qbo.intuit.com/app/banking
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=intuit.com
 // @grant        none
@@ -19,23 +19,48 @@
             const filterWords = [
                 "deposit",
                 "withdrawal",
-                "refund"
+                "refund",
+                "overdraw",
+                "interest",
+                "westpac"
             ];
 
             // Class name of transaction table, subject to change by Quickbooks
             var table = document.getElementsByClassName('idsTable__columnGroup')[1];
-            filterWords.forEach(filterWord => {
-                // Loop through each cell
-                for (let r = table.rows.length - 1; r >= 0; r--) {
-                    // Check if the row is a data (and not a month heading), as only row heading have the class name 'group-header-row'
-                    if (!table.rows[r].classList.contains('group-header-row')) {
-                        // Remove entire row if 2nd column (being the description) of each row contains the word 'deposit' or 'withdrawal'
+            // Loop through each row
+            for (let r = table.rows.length - 1; r >= 0; r--) {
+                // Check if the row is a data (and not a month heading), as only row heading have the class name 'group-header-row'
+                if (!table.rows[r].classList.contains('group-header-row')) {
+                    // Use Blacklist
+                    //
+                    // Loop through each filter word
+                    filterWords.forEach(filterWord => {
+                        // Remove entire row if 2nd column (being the description) of each row contains one of the filter words
                         if (table.rows[r].cells[2].innerHTML.toLowerCase().indexOf(filterWord) !== -1) {
                             table.deleteRow(r);
                         }
+
+                    })
+                    //
+
+                    // Use Whitelist
+                    /*
+                    // Initiate remove to true, to tell program to delete the row by default
+                    let remove = true;
+                    filterWords.forEach(filterWord => {
+                        // Check if the filterWord in the current iteration is in this row
+                        if (table.rows[r].cells[2].innerHTML.toLowerCase().indexOf(filterWord) !== -1) {
+                            // If the filterWord exists, set deleterow to false so the program does NOT delete the row
+                            remove = false;
+                        }
+                    })
+                    // If deleterow remains true after going through all filterWords, delete the row
+                    if (remove) {
+                        table.deleteRow(r);
                     }
+                    */
                 }
-            })
+            }
 
             // Count and display the new number of transactions
             // Find the heading of each month
