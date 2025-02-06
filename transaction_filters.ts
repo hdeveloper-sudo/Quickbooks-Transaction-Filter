@@ -29,7 +29,7 @@
     setInterval(function() {
         if(document.getElementsByClassName('idsTable__columnGroup')[1] !== undefined){
             // Class name of transaction table, subject to change by Quickbooks
-            var table: HTMLTableElement = document.getElementsByClassName('idsTable__columnGroup')[1];
+            var table: HTMLTableElement = document.getElementsByClassName('idsTable__columnGroup')[1] as HTMLTableElement;
             // Loop through each row
             for (let r = table.rows.length - 1; r >= 0; r--) {
                 // Check if the row is a data (and not a month heading), as only row heading have the class name 'group-header-row'
@@ -46,8 +46,8 @@
 
             // Count and display the new number of transactions
             // Find the heading of each month
-            var montheadings: HTMLTableRowElement[] = Array.from(document.getElementsByClassName('group-header-row'));
-            var tablerows: HTMLTableRowElement[] = Array.from(document.getElementsByClassName('idsTable__columnGroup')[1].querySelectorAll('tr'));
+            var montheadings: HTMLTableRowElement[] = Array.from(document.getElementsByClassName('group-header-row')) as HTMLTableRowElement[];
+            var tablerows: HTMLTableRowElement[] = Array.from(document.getElementsByClassName('idsTable__columnGroup')[1].querySelectorAll('tr')) as HTMLTableRowElement[];
             // Count the number of rows between each month heading, and between last month heading and end of table for last month
             for (var i = 0; i < montheadings.length; i++) {
                 var numofTransactions: number;
