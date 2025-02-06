@@ -1,5 +1,5 @@
 # Typescript
-This version trials using typescript for ease of future editing. However, this comes with the issue of typescript _not_ knowing `table` from _line 32_ and `montheadings` from _line 49_ are `HTMLTableElement` and `HTMLTableRowElement[]` (array of `HTMLTableRowElement`s) type respectively, since it _thinks_ it's missing all the table property when it does not have access to the actual Quickbook file. At least, that is what I think is causing the error; I am still quite new to Typescript.
+This version trials using typescript for ease of future editing
 # Previous Version
 This application allows users to filter "_for review_" transactions. It is fully client side, so it does not affect the database on Quickbooks' end. Perfect for bank transactions handled by multiple accountants; filtering only what matters to you.
 
