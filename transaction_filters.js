@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Hide transactions from Quickbook
 // @namespace    http://tampermonkey.net/
-// @version      2024-12-19
+// @version      2025-02-13
 // @description  Great for businesses who have multiple accountants working on different kinds of transactions
-// @author       You
+// @author       Hugo
 // @match        https://qbo.intuit.com/app/banking
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=intuit.com
 // @grant        none
@@ -22,6 +22,10 @@
     ];
     // Configure whether to use filterWords as Blacklist or Whitelist
     const blacklist = true; // change to false to use filterWords as whitelist instead
+    // Hides transactions that has a match found
+    var filtermatches = true; // true = on, change to false to disable
+    // Find which column to check for matches (only required if filtermatches is set to true)
+    var coltocheck;
     setInterval(function () {
         if (document.getElementsByClassName('idsTable__columnGroup')[1] !== undefined) {
             // Class name of transaction table, subject to change by Quickbooks
@@ -37,6 +41,28 @@
                     else {
                         // Use Whitelist
                         Whitelist(table, r);
+                    }
+                    // Remove row if match is found
+                    if (filtermatches) {
+                        // Run once only if coltocheck is undefined
+                        if (coltocheck == undefined) {
+                            for (let c = table.rows[r].cells.length - 1; c >= 0; c--) {
+                                if (table.rows[r].cells[c].classList.contains('category')) {
+                                    coltocheck = c; // Keeps coltocheck as that column to check for all other rows
+                                }
+                            }
+                            // If category row cannot be found and coltocheck remains undefined, turn filtermatches off to save resources for future row iterations
+                            if (coltocheck == undefined) {
+                                filtermatches = false;
+                            }
+                        }
+                    }
+                    // Check if filtermatches is still true
+                    if (filtermatches) {
+                        // Perform deletion if match is found on this row iteration
+                        if (table.rows[r].cells[coltocheck].getElementsByClassName('assign-to')[0].getElementsByTagName('div')[0].classList.contains('match-record')) {
+                            table.deleteRow(r);
+                        }
                     }
                 }
             }
