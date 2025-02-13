@@ -1,5 +1,5 @@
 # Now with ability to filter out automatically matched transactions too
-(only works in Business View)
+Update: Now works in both *accountant* and *business* view
 
 This application allows users to filter "_for review_" transactions. It is fully client side, so it does not affect the database on Quickbooks' end. Perfect for bank transactions handled by multiple accountants; filtering only what matters to you.
 

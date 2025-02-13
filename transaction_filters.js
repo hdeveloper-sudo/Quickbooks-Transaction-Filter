@@ -26,6 +26,9 @@
     var filtermatches = true; // true = on, change to false to disable
     // Find which column to check for matches (only required if filtermatches is set to true)
     var coltocheck;
+    // Check if table is in accountant of business view (only required if filtermatches is set to true)
+    var viewchecked = false;
+    var matchcheck; // What element to check for match found or not
     setInterval(function () {
         if (document.getElementsByClassName('idsTable__columnGroup')[1] !== undefined) {
             // Class name of transaction table, subject to change by Quickbooks
@@ -60,7 +63,21 @@
                     // Check if filtermatches is still true
                     if (filtermatches) {
                         // Perform deletion if match is found on this row iteration
-                        if (table.rows[r].cells[coltocheck].getElementsByClassName('assign-to')[0].getElementsByTagName('div')[0].classList.contains('match-record')) {
+                        // First check if table is in accountant view or business view format
+                        if (!viewchecked) {
+                            if (window.getComputedStyle(table.rows[r]).backgroundColor == 'rgba(0, 0, 0, 0)') {
+                                // Accountant view format
+                                matchcheck = table.rows[r].cells[coltocheck].classList.contains('match');
+                            }
+                            else {
+                                // Business view format
+                                matchcheck = table.rows[r].cells[coltocheck].getElementsByClassName('assign-to')[0].getElementsByTagName('div')[0].classList.contains('match-record');
+                            }
+                            // Set viewchecked to true so this does not need to run every iteration
+                            viewchecked = true;
+                        }
+                        // Check if transaction is matched
+                        if (matchcheck) {
                             table.deleteRow(r);
                         }
                     }
