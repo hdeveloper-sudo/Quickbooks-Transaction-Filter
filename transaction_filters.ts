@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hide transactions from Quickbook
 // @namespace    http://tampermonkey.net/
-// @version      2025-02-13
+// @version      2025-02-19
 // @description  Great for businesses who have multiple accountants working on different kinds of transactions
 // @author       Hugo
 // @match        https://qbo.intuit.com/app/banking
@@ -69,7 +69,7 @@
                         // Perform deletion if match is found on this row iteration
                         // First check if table is in accountant view or business view format
                         if (!viewchecked) {
-                            if (window.getComputedStyle(table.rows[r]).backgroundColor == 'rgba(0, 0, 0, 0)') {
+                            if (window.getComputedStyle(table.rows[r].cells[1]).borderLeftColor == 'rgb(212, 215, 220)') {
                                 // Accountant view format
                                 matchcheck = table.rows[r].cells[coltocheck].classList.contains('match');
                             }
